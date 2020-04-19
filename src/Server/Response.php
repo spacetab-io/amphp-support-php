@@ -34,7 +34,7 @@ final class Response
     }
 
     /**
-     * @param $value
+     * @param array $value
      * @return string
      * @throws \JsonException
      */

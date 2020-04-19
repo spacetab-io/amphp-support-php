@@ -4,7 +4,7 @@ namespace Spacetab\AmphpSupport\Exception;
 
 use Amp\Http\Status;
 
-class ValidationException extends HttpException
+final class ValidationException extends HttpException
 {
     public const VALIDATION_CODE = 'ValidationError';
     public const VALIDATION_MESSAGE = 'Error occurred in input data. Please, correct them and send request again.';
