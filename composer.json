@@ -13,8 +13,6 @@
     "php": ">=7.4",
     "ext-pcntl": "*",
     "ext-json": "*",
-    "spacetab-io/harmony-validation": "^1.1",
-    "adbario/php-dot-notation": "^2.2",
     "amphp/http-server": "^2.0",
     "spacetab-io/transformation-layer": "^1.0",
     "spacetab-io/body-validator": "^1.0"
