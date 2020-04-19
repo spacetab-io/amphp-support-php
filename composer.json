@@ -1,0 +1,44 @@
+{
+  "name": "spacetab-io/amphp-support",
+  "description": "Package to reduce code duplication across services.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "roquie",
+      "email": "roquie0@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-pcntl": "*",
+    "ext-json": "*",
+    "spacetab-io/harmony-validation": "^1.1",
+    "adbario/php-dot-notation": "^2.2",
+    "amphp/http-server": "^2.0",
+    "spacetab-io/transformation-layer": "^1.0",
+    "spacetab-io/body-validator": "^1.0"
+  },
+  "require-dev": {
+    "amphp/http-client": "^4.2",
+    "amphp/http-server-router": "^1.0",
+    "amphp/phpunit-util": "^1.3",
+    "phpstan/phpstan": "^0.12.5",
+    "phpunit/phpunit": "^9",
+    "spacetab-io/logger": "^1.0",
+    "symfony/var-dumper": "^5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Spacetab\\AmphpSupport\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Spacetab\\Tests\\AmphpSupport\\": "tests"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
