@@ -137,7 +137,7 @@ class ComplexTest extends AsyncTestCase
         call(fn () => yield $this->server->start());
 
         $request = new ClientRequest(self::ADDRESS . '/post', 'POST');
-        $request->addHeader('Content-Type', 'application/json');
+        $request->addHeader('Content-Type', 'application/json; charset=utf-8');
 
         /** @var \Amp\Http\Client\Response $response */
         $response = yield $this->client->request($request);

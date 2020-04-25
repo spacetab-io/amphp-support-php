@@ -17,7 +17,9 @@ abstract class AbstractBody implements Middleware, BodyValidatorInterface
      */
     protected function requestHasValidHeader(Request $request): void
     {
-        if ($request->getHeader('Content-Type') !== 'application/json') {
+        $contents = $request->getHeader('Content-Type');
+
+        if (strpos($contents, 'application/json') === false) {
             throw JsonRequestException::contentTypeNotAllowed();
         }
     }
