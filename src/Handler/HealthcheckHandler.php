@@ -15,6 +15,7 @@ class HealthcheckHandler implements RequestHandler
 {
     public function handleRequest(Request $request): Promise
     {
+        // @phpstan-ignore-next-line
         return  call(fn () => new Response(Status::OK, [], 'ok'));
     }
 }

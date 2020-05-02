@@ -6,12 +6,15 @@ namespace Spacetab\AmphpSupport\Handler;
 
 trait TrustedRequestTrait
 {
+    /**
+     * @var array<mixed>
+     */
     protected array $trustedBody;
 
     /**
      * Sets the trusted body contents after validation.
      *
-     * @param array $body
+     * @param array<mixed> $body
      * @return $this
      */
     public function setTrustedBody(array $body): self
@@ -24,7 +27,7 @@ trait TrustedRequestTrait
     /**
      * Gets the trusted body contents after validation.
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getTrustedBody(): array
     {

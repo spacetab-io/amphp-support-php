@@ -9,12 +9,16 @@ use Amp\Http\Server\Request;
 use Amp\Http\Status;
 use Amp\Promise;
 use Amp\Success;
-use Spacetab\AmphpSupport\Server\Response;
 use Spacetab\Transformation\ErrorTransformation;
 
 final class ErrorHandler implements ErrorHandlerInterface
 {
-    /** {@inheritdoc} */
+    /**
+     * @param int $statusCode
+     * @param string|null $reason
+     * @param Request|null $request
+     * @return Promise<\Amp\Http\Server\Response>
+     */
     public function handleError(int $statusCode, string $reason = null, Request $request = null): Promise
     {
         return new Success(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spacetab\AmphpSupport\Server;
 
+use Amp\ByteStream\InputStream;
 use Amp\Http\Server\Response as ServerResponse;
 use Amp\Http\Status;
 use JsonException;
@@ -34,12 +35,45 @@ final class Response
     }
 
     /**
-     * @param array $value
+     * @param InputStream|string|null $stringOrStream
+     * @param string|null $filename
+     * @return ServerResponse
+     */
+    public static function asPdf($stringOrStream, string $filename = null): ServerResponse
+    {
+        if (is_null($filename)) {
+            $filename = self::getFilename('pdf');
+        }
+
+        return new ServerResponse(Status::OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\""
+        ], $stringOrStream);
+    }
+
+    /**
+     * @param InputStream|string|null $stringOrStream
+     * @return ServerResponse
+     */
+    public static function asHtml($stringOrStream): ServerResponse
+    {
+        return new ServerResponse(Status::OK, [
+            'Content-Type' => 'text/html'
+        ], $stringOrStream);
+    }
+
+    /**
+     * @param mixed $value
      * @return string
      * @throws \JsonException
      */
     private static function jsonEncode($value): string
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    }
+
+    private static function getFilename(string $extension): string
+    {
+        return sprintf("file-%s.%s", date('dmY-His'), $extension);
     }
 }

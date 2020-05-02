@@ -17,15 +17,16 @@ use function Amp\call;
 abstract class AcceptJsonBody extends AbstractBody
 {
     /**
-     * @param \Amp\Http\Server\Request $request
-     * @param \Amp\Http\Server\RequestHandler $requestHandler
-     * @return \Amp\Promise
-     * @throws \Spacetab\AmphpSupport\Exception\JsonRequestException
+     * @param Request $request
+     * @param RequestHandler $requestHandler
+     * @return Promise<\Amp\Http\Server\Response>
+     * @throws JsonRequestException
      */
     public function handleRequest(Request $request, RequestHandler $requestHandler): Promise
     {
         $this->requestHasValidHeader($request);
 
+        // @phpstan-ignore-next-line
         return call(function() use ($request, $requestHandler) {
             $body = yield $request->getBody()->read();
 

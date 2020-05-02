@@ -19,20 +19,29 @@ use function Amp\call;
 
 final class ExceptionMiddleware implements Middleware
 {
+    /**
+     * @var array<string, string>
+     */
     private array $validationMap;
 
     /**
      * ExceptionMiddleware constructor.
      *
-     * @param array $validationMap
+     * @param array<string, string> $validationMap
      */
     public function __construct(array $validationMap = [])
     {
         $this->validationMap = $validationMap;
     }
 
+    /**
+     * @param Request $request
+     * @param RequestHandler $requestHandler
+     * @return Promise<\Amp\Http\Server\Response>
+     */
     public function handleRequest(Request $request, RequestHandler $requestHandler): Promise
     {
+        // @phpstan-ignore-next-line
         return call(function () use ($request, $requestHandler) {
             try {
                 return yield $requestHandler->handleRequest($request);
@@ -49,6 +58,10 @@ final class ExceptionMiddleware implements Middleware
         });
     }
 
+    /**
+     * @param array<string, array<\HarmonyIO\Validation\Result\Error>> $errors
+     * @return \Spacetab\Transformation\ValidationError
+     */
     protected function fillUserMistakes(array $errors): ValidationError
     {
         $valid = new ValidationError();

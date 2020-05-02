@@ -11,7 +11,7 @@ interface TrustedRequestInterface extends RequestHandler
     /**
      * Sets the trusted body contents after validation.
      *
-     * @param array $body
+     * @param array<mixed> $body
      * @return $this
      */
     public function setTrustedBody(array $body): self;
@@ -19,7 +19,7 @@ interface TrustedRequestInterface extends RequestHandler
     /**
      * Gets the trusted body contents after validation.
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getTrustedBody(): array;
 }

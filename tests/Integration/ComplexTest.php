@@ -66,6 +66,9 @@ class ComplexTest extends AsyncTestCase
             }
         }, $validationMiddleware);
         $router->addRoute('POST', '/bad', new CallableRequestHandler(fn() => new Success), $validationMiddleware);
+        $router->addRoute('POST', '/pdf-file-passed', new CallableRequestHandler(fn() => Response::asPdf('pdf', 'file.pdf')));
+        $router->addRoute('POST', '/pdf-file-default', new CallableRequestHandler(fn() => Response::asPdf('pdf')));
+        $router->addRoute('POST', '/html', new CallableRequestHandler(fn() => Response::asHtml('<p>hi</p>')));
         $this->server = new HttpServer($sockets, $router, new NullLogger());
         $this->server->setErrorHandler(new ErrorHandler());
 
@@ -197,5 +200,58 @@ class ComplexTest extends AsyncTestCase
         $expected = '{"error":{"message":"Your RequestHandler should be implemented as `Trusted RequestInterface` to receive parsed body.","code":"AppError"}}';
         $this->assertJsonStringEqualsJsonString($expected, $contents);
         $this->assertSame(Status::INTERNAL_SERVER_ERROR, $response->getStatus());
+    }
+
+    public function testWhereServerResponseAsPdfFileWithPassedFilename()
+    {
+        call(fn () => yield $this->server->start());
+
+        $request = new ClientRequest(self::ADDRESS . '/pdf-file-passed', 'POST');
+
+        /** @var \Amp\Http\Client\Response $response */
+        $response = yield $this->client->request($request);
+        $contents = yield $response->getBody()->read();
+        $headers = $response->getHeaders();
+        yield $this->server->stop();
+
+        $this->assertSame(Status::OK, $response->getStatus());
+        $this->assertSame('application/pdf', $headers['content-type'][0]);
+        $this->assertSame('attachment; filename="file.pdf"', $headers['content-disposition'][0]);
+        $this->assertSame('pdf', $contents);
+    }
+
+    public function testWhereServerResponseAsPdfFileWithDefaultFilename()
+    {
+        call(fn () => yield $this->server->start());
+
+        $request = new ClientRequest(self::ADDRESS . '/pdf-file-default', 'POST');
+
+        /** @var \Amp\Http\Client\Response $response */
+        $response = yield $this->client->request($request);
+        $contents = yield $response->getBody()->read();
+        $headers = $response->getHeaders();
+        yield $this->server->stop();
+
+        $this->assertSame(Status::OK, $response->getStatus());
+        $this->assertSame('application/pdf', $headers['content-type'][0]);
+        $this->assertMatchesRegularExpression('/attachment\; filename\=\".*\"/', $headers['content-disposition'][0]);
+        $this->assertSame('pdf', $contents);
+    }
+
+    public function testWhereServerResponseAsHtml()
+    {
+        call(fn () => yield $this->server->start());
+
+        $request = new ClientRequest(self::ADDRESS . '/html', 'POST');
+
+        /** @var \Amp\Http\Client\Response $response */
+        $response = yield $this->client->request($request);
+        $contents = yield $response->getBody()->read();
+        $headers = $response->getHeaders();
+        yield $this->server->stop();
+
+        $this->assertSame(Status::OK, $response->getStatus());
+        $this->assertSame('text/html', $headers['content-type'][0]);
+        $this->assertSame('<p>hi</p>', $contents);
     }
 }
